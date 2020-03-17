@@ -52,7 +52,7 @@ func signDataRSA(ctx PKCS11Ctx, session p11.SessionHandle, hsmPrivateObject p11.
 
 	privateKeyHandle := hsmPrivateObject
 
-	//var buf []byte
+	var buf []byte
 	// We only support SHA1, SHA256, SHA384 and SHA512 hash digest algorithms.
 	// If the data is the digest from one of those algorithms,
 	// we need to prepend the hash identifier before generating
