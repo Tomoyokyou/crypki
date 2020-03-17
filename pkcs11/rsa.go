@@ -58,21 +58,21 @@ func signDataRSA(ctx PKCS11Ctx, session p11.SessionHandle, hsmPrivateObject p11.
 	// we need to prepend the hash identifier before generating
 	// the signature for the buffer.
 	//hash := opts.HashFunc()
-	hash := crypto.Hash(0)
 	mech := make([]*p11.Mechanism, 1)
-	switch hash {
-	case crypto.SHA1, crypto.SHA256, crypto.SHA384, crypto.SHA512:
-		buf = append(hashPrefixes[hash], data...)
-		mech[0] = p11.NewMechanism(p11.CKM_RSA_PKCS, nil)
-	default:
-		return nil, errors.New("Unsupported hash algorithm")
-	}
+	//switch hash {
+	//case crypto.SHA1, crypto.SHA256, crypto.SHA384, crypto.SHA512:
+	//	buf = append(hashPrefixes[hash], data...)
+	//	mech[0] = p11.NewMechanism(p11.CKM_RSA_PKCS, nil)
+	//default:
+	//	return nil, errors.New("Unsupported hash algorithm")
+	//}
+	mech[0] = p11.NewMechanism(p11.CKM_RSA_PKCS, nil)
 
 	err := ctx.SignInit(session, mech, privateKeyHandle)
 	if err != nil {
 		panic(err)
 	}
-	signed, err := ctx.Sign(session, buf)
+	signed, err := ctx.Sign(session, data)
 	if err != nil {
 		panic(err)
 	}
