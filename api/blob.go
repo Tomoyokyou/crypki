@@ -96,11 +96,12 @@ func (s *SigningService) PostSignBlob(ctx context.Context, request *proto.BlobSi
 		return nil, status.Errorf(codes.InvalidArgument, "Bad request: %v", err)
 	}
 
-	digest, err := base64.StdEncoding.DecodeString(request.GetDigest())
-	if err != nil {
-		statusCode = http.StatusBadRequest
-		return nil, status.Errorf(codes.InvalidArgument, "Bad request: %v", err)
-	}
+	digest := []byte(request.GetDigest())
+	//digest, err := base64.StdEncoding.DecodeString(request.GetDigest())
+	//if err != nil {
+	//	statusCode = http.StatusBadRequest
+	//	return nil, status.Errorf(codes.InvalidArgument, "Bad request: %v", err)
+	//}
 	if len(digest) > maxDigestLen {
 		statusCode = http.StatusBadRequest
 		return nil, status.Error(codes.InvalidArgument, "Bad request: digest length too long")
