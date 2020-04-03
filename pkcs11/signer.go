@@ -157,7 +157,8 @@ func (s *signer) SignX509Cert(cert *x509.Certificate, keyIdentifier string) ([]b
 		return nil, err
 	}
 	ht = time.Since(hStart).Nanoseconds() / time.Microsecond.Nanoseconds()
-	return pem.EncodeToMemory(&pem.Block{Type: "CERTIFICATE", Bytes: signedCert}), nil
+	return signedCert, nil
+	//return pem.EncodeToMemory(&pem.Block{Type: "CERTIFICATE", Bytes: signedCert}), nil
 }
 
 func (s *signer) GetBlobSigningPublicKey(keyIdentifier string) ([]byte, error) {
