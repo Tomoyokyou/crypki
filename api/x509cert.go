@@ -108,7 +108,7 @@ func (s *SigningService) PostX509Certificate(ctx context.Context, request *proto
 		return nil, status.Errorf(codes.InvalidArgument, "Bad request: %v", err)
 	}
 
-	data, err := s.SignX509Cert(req, request.KeyMeta.Identifier)
+	_, err = s.SignX509Cert(req, request.KeyMeta.Identifier)
 	if err != nil {
 		statusCode = http.StatusInternalServerError
 		return nil, status.Error(codes.Internal, "Internal server error")
