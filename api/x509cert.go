@@ -113,5 +113,6 @@ func (s *SigningService) PostX509Certificate(ctx context.Context, request *proto
 		statusCode = http.StatusInternalServerError
 		return nil, status.Error(codes.Internal, "Internal server error")
 	}
-	return &proto.X509Certificate{Cert: string(data)}, nil
+	return &proto.X509Certificate{}, nil
+	//return &proto.X509Certificate{Cert: string(data)}, nil
 }
