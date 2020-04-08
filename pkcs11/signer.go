@@ -150,13 +150,13 @@ func (s *signer) SignX509Cert(cert *x509.Certificate, keyIdentifier string) ([]b
 	defer pool.put(signer)
 	cert.SignatureAlgorithm = getSignatureAlgorithm(signer.signAlgorithm())
 	// measure time taken by hsm
-	hStart := time.Now()
-	_, err := x509.CreateCertificate(rand.Reader, cert, s.x509CACerts[keyIdentifier], cert.PublicKey, signer)
-	if err != nil {
-		ht = time.Since(hStart).Nanoseconds() / time.Microsecond.Nanoseconds()
-		return nil, err
-	}
-	ht = time.Since(hStart).Nanoseconds() / time.Microsecond.Nanoseconds()
+	//hStart := time.Now()
+	//_, err := x509.CreateCertificate(rand.Reader, cert, s.x509CACerts[keyIdentifier], cert.PublicKey, signer)
+	//if err != nil {
+	//	ht = time.Since(hStart).Nanoseconds() / time.Microsecond.Nanoseconds()
+	//	return nil, err
+	//}
+	//ht = time.Since(hStart).Nanoseconds() / time.Microsecond.Nanoseconds()
 	return []byte("test"), nil
 	//return signedCert, nil
 	//return pem.EncodeToMemory(&pem.Block{Type: "CERTIFICATE", Bytes: signedCert}), nil
