@@ -142,21 +142,21 @@ func (s *signer) SignX509Cert(cert *x509.Certificate, keyIdentifier string) ([]b
 		log.Printf("m=%s: ht=%d, xt=%d", methodName, ht, xt)
 	}()
 
-	//pool, ok := s.sPool[keyIdentifier]
-	//if !ok {
-	//	return nil, fmt.Errorf("unknown key identifier %q", keyIdentifier)
-	//}
-	//signer := pool.get()
-	//defer pool.put(signer)
-	//cert.SignatureAlgorithm = getSignatureAlgorithm(signer.signAlgorithm())
-	//// measure time taken by hsm
-	//hStart := time.Now()
-	//_, err := x509.CreateCertificate(rand.Reader, cert, s.x509CACerts[keyIdentifier], cert.PublicKey, signer)
-	//if err != nil {
-	//	ht = time.Since(hStart).Nanoseconds() / time.Microsecond.Nanoseconds()
-	//	return nil, err
-	//}
-	//ht = time.Since(hStart).Nanoseconds() / time.Microsecond.Nanoseconds()
+	pool, ok := s.sPool[keyIdentifier]
+	if !ok {
+		return nil, fmt.Errorf("unknown key identifier %q", keyIdentifier)
+	}
+	signer := pool.get()
+	defer pool.put(signer)
+	cert.SignatureAlgorithm = getSignatureAlgorithm(signer.signAlgorithm())
+	// measure time taken by hsm
+	hStart := time.Now()
+	_, err := x509.CreateCertificate(rand.Reader, cert, s.x509CACerts[keyIdentifier], cert.PublicKey, signer)
+	if err != nil {
+		ht = time.Since(hStart).Nanoseconds() / time.Microsecond.Nanoseconds()
+		return nil, err
+	}
+	ht = time.Since(hStart).Nanoseconds() / time.Microsecond.Nanoseconds()
 	return []byte("test"), nil
 	//return signedCert, nil
 	//return pem.EncodeToMemory(&pem.Block{Type: "CERTIFICATE", Bytes: signedCert}), nil
