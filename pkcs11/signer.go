@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"crypto"
 	"crypto/rand"
+	"crypto/rsa"
 	"crypto/x509"
 	"encoding/pem"
 	"errors"
@@ -142,16 +143,18 @@ func (s *signer) SignX509Cert(cert *x509.Certificate, keyIdentifier string) ([]b
 		log.Printf("m=%s: ht=%d, xt=%d", methodName, ht, xt)
 	}()
 
-	pool, ok := s.sPool[keyIdentifier]
-	if !ok {
-		return nil, fmt.Errorf("unknown key identifier %q", keyIdentifier)
-	}
-	signer := pool.get()
-	defer pool.put(signer)
-	cert.SignatureAlgorithm = getSignatureAlgorithm(signer.signAlgorithm())
+	//pool, ok := s.sPool[keyIdentifier]
+	//if !ok {
+	//	return nil, fmt.Errorf("unknown key identifier %q", keyIdentifier)
+	//}
+	//signer := pool.get()
+	Priv, _ := rsa.GenerateKey(rand.Reader, 4096)
+	//defer pool.put(signer)
+	//cert.SignatureAlgorithm = getSignatureAlgorithm(signer.signAlgorithm())
+	cert.SignatureAlgorithm = x509.SHA256WithRSA
 	// measure time taken by hsm
 	hStart := time.Now()
-	signedCert, err := x509.CreateCertificate(rand.Reader, cert, s.x509CACerts[keyIdentifier], cert.PublicKey, signer)
+	signedCert, err := x509.CreateCertificate(rand.Reader, cert, s.x509CACerts[keyIdentifier], cert.PublicKey, &Priv)
 	if err != nil {
 		ht = time.Since(hStart).Nanoseconds() / time.Microsecond.Nanoseconds()
 		return nil, err
