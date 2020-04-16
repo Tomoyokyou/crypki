@@ -19,7 +19,7 @@ const (
 	defaultTLSCACertPath     = "/opt/crypki/ca.crt"
 	defaultTLSServerKeyPath  = "/opt/crypki/server.key"
 	defaultTLSPort           = "4443"
-	defaultPoolSize          = 2
+	defaultPoolSize          = 10
 	defaultKeyType           = crypki.RSA
 
 	// X509CertEndpoint specifies the endpoint for signing X509 certificate.
